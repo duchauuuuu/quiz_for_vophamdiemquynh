@@ -1,9 +1,12 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import './QuizGame.css';
 import { Button, Card, Modal, Form, Container, Row, Col } from 'react-bootstrap';
 
 const QuizGame = () => {
+    useEffect(() => {
+        document.title = 'Quiz Võ Phạm Diễm Quỳnh';
+      }, []); // Mảng rỗng để chỉ chạy một lần khi component mount
   const [customQuestions, setCustomQuestions] = useState(
     Array.from({ length: 8 }, () => ({ 
       question: '', 
