@@ -3,7 +3,7 @@ import './App.css';
 import QuizGame from './QuizGame';
 
 function App() {
-  
+  document.title = "Quiz Võ Phạm Diễm Quỳnh";
   return (
    <>
     <QuizGame/>
