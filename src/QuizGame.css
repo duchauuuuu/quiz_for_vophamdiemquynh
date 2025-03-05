@@ -1,100 +1,184 @@
-/* QuizGame.css */
 .quiz-container {
-    background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
-    min-height: 100vh;
-    padding: 2rem;
-  }
-  
+  background: linear-gradient(135deg, #e0eafc 0%, #cfdef3 100%);
+  min-height: 100vh;
+  padding: 3rem 2rem;
+  font-family: 'Poppins', sans-serif;
+}
+
+.tile-btn {
+  width: 110px;
+  height: 110px;
+  min-width: 110px;
+  min-height: 110px;
+  font-size: 1.8rem;
+  font-weight: 600;
+  border-radius: 12px;
+  background: #ffffff;
+  border: 3px solid #007bff;
+  color: #007bff;
+  transition: all 0.3s ease-in-out;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.tile-btn:hover:not(:disabled) {
+  transform: scale(1.1);
+  background: #007bff;
+  color: #ffffff;
+  box-shadow: 0 6px 12px rgba(0, 123, 255, 0.3);
+}
+
+.tile-btn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+  background: #e9ecef;
+  border-color: #6c757d;
+  color: #6c757d;
+}
+
+.team-card {
+  background: #ffffff;
+  border-radius: 12px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  transition: all 0.3s ease;
+  border: 2px solid #dee2e6;
+}
+
+.team-card.active {
+  border-color: #007bff;
+  box-shadow: 0 6px 14px rgba(0, 123, 255, 0.25);
+  transform: translateY(-5px);
+}
+
+.team-card .card-header {
+  background: #f8f9fa;
+  font-weight: 600;
+  color: #343a40;
+  padding: 0.75rem 1.25rem;
+  border-bottom: none;
+}
+
+.modal-content {
+  border-radius: 20px;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+  border: none;
+}
+
+.modal-header {
+  background: linear-gradient(90deg, #007bff, #00c4ff);
+  color: #ffffff;
+  border-top-left-radius: 20px;
+  border-top-right-radius: 20px;
+  padding: 1.5rem;
+}
+
+.modal-title {
+  font-weight: 700;
+  font-size: 1.5rem;
+}
+
+.modal-body {
+  padding: 2rem;
+}
+
+.question-input {
+  background: #ffffff;
+  border-radius: 15px;
+  padding: 2rem;
+  margin-bottom: 1.5rem;
+  box-shadow: 0 3px 6px rgba(0, 0, 0, 0.05);
+  transition: all 0.3s ease;
+}
+
+.question-input:hover {
+  box-shadow: 0 5px 12px rgba(0, 0, 0, 0.1);
+}
+
+.form-label {
+  font-weight: 600;
+  color: #495057;
+}
+
+.form-control,
+.form-select {
+  border-radius: 10px;
+  border: 2px solid #ced4da;
+  padding: 0.75rem;
+  transition: all 0.3s ease;
+}
+
+.form-control:focus,
+.form-select:focus {
+  border-color: #007bff;
+  box-shadow: 0 0 8px rgba(0, 123, 255, 0.2);
+}
+
+.btn-custom {
+  padding: 0.75rem 2rem;
+  font-weight: 600;
+  border-radius: 30px;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  transition: all 0.3s ease;
+}
+
+.btn-custom:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
+}
+
+.btn-primary.btn-custom {
+  background: linear-gradient(90deg, #007bff, #00c4ff);
+  border: none;
+}
+
+.btn-danger.btn-custom {
+  background: linear-gradient(90deg, #dc3545, #ff6b6b);
+  border: none;
+}
+
+.btn-secondary.btn-custom {
+  background: linear-gradient(90deg, #6c757d, #adb5bd);
+  border: none;
+}
+
+.btn-success.btn-custom {
+  background: linear-gradient(90deg, #28a745, #4cd964);
+  border: none;
+}
+
+.winner-text {
+  color: #28a745;
+  font-weight: 700;
+  font-size: 1.8rem;
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+.quiz-container, .modal-content {
+  animation: fadeIn 0.5s ease-in-out;
+}
+
+@media (max-width: 768px) {
   .tile-btn {
-    width: 100px; /* Chiều rộng cố định */
-    height: 100px; /* Chiều cao cố định */
-    min-width: 100px; /* Đảm bảo không bị co nhỏ hơn */
-    min-height: 100px; /* Đảm bảo không bị co nhỏ hơn */
-    font-size: 1.5rem;
-    font-weight: bold;
-    transition: all 0.3s ease;
-    border-width: 2px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
+    width: 80px;
+    height: 80px;
+    min-width: 80px;
+    min-height: 80px;
+    font-size: 1.2rem;
   }
-  
-  .tile-btn:hover:not(:disabled) {
-    transform: scale(1.05);
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-  }
-  
-  .tile-btn:disabled {
-    opacity: 0.7;
-    cursor: not-allowed;
-  }
-  
-  .team-card {
-    background-color: #fff;
-    border-radius: 10px;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-    transition: all 0.3s ease;
-  }
-  
-  .team-card.active {
-    border-color: #007bff !important;
-    box-shadow: 0 4px 12px rgba(0, 123, 255, 0.3);
-  }
-  
-  .modal-content {
-    border-radius: 15px;
-    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
-  }
-  
-  .modal-header {
-    background-color: #007bff;
-    color: white;
-    border-top-left-radius: 15px;
-    border-top-right-radius: 15px;
-  }
-  
-  .question-input {
-    background-color: #fff;
-    border-radius: 10px;
+
+  .modal-body {
     padding: 1.5rem;
-    margin-bottom: 1rem;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
   }
-  
+
   .btn-custom {
     padding: 0.5rem 1.5rem;
-    font-weight: bold;
-    border-radius: 25px;
-    transition: all 0.3s ease;
   }
-  
-  .btn-custom:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
-  }
-  
-  .btn-primary.btn-custom {
-    background-color: #007bff;
-    border-color: #007bff;
-  }
-  
-  .btn-danger.btn-custom {
-    background-color: #dc3545;
-    border-color: #dc3545;
-  }
-  
-  .btn-secondary.btn-custom {
-    background-color: #6c757d;
-    border-color: #6c757d;
-  }
-  
-  .btn-success.btn-custom {
-    background-color: #28a745;
-    border-color: #28a745;
-  }
-  
-  .winner-text {
-    color: #28a745;
-    font-weight: bold;
-    font-size: 1.5rem;
-  }
+}

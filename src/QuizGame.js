@@ -4,14 +4,15 @@ import './QuizGame.css';
 import { Button, Card, Modal, Form, Container, Row, Col } from 'react-bootstrap';
 
 const QuizGame = () => {
-    useEffect(() => {
-        document.title = '  Quiz Võ Phạm Diễm Quỳnh';
-      }, []); // Mảng rỗng để chỉ chạy một lần khi component mount
+  useEffect(() => {
+    document.title = 'Quiz Võ Phạm Diễm Quỳnh';
+  }, []); // Mảng rỗng để chỉ chạy một lần khi component mount
+
   const [customQuestions, setCustomQuestions] = useState(
-    Array.from({ length: 8 }, () => ({ 
-      question: '', 
+    Array.from({ length: 8 }, () => ({
+      question: '',
       correctAnswer: '',
-      answerType: 'Okay!' 
+      answerType: 'Okay!'
     }))
   );
 
@@ -60,7 +61,7 @@ const QuizGame = () => {
     const finalTiles = allTiles.slice(0, 16);
 
     const tilesState = finalTiles.reduce((acc, tile) => ({
-      ...acc, 
+      ...acc,
       [tile.id]: false
     }), {});
 
@@ -81,34 +82,34 @@ const QuizGame = () => {
   };
 
   const startGame = () => {
-    const allQuestionsValid = customQuestions.every(q => 
+    const allQuestionsValid = customQuestions.every(q =>
       q.question.trim() !== '' && q.correctAnswer.trim() !== ''
     );
-    
+
     if (!allQuestionsValid) {
       alert('Vui lòng điền đầy đủ câu hỏi và câu trả lời!');
       return;
     }
 
-    const initialTeams = gameSetup.teams.length > 0 
-      ? gameSetup.teams 
+    const initialTeams = gameSetup.teams.length > 0
+      ? gameSetup.teams
       : ['Đội 1', 'Đội 2'];
 
     setGameSetup(prev => ({
       ...prev,
       teams: initialTeams,
       currentTeam: 0,
-      scores: initialTeams.reduce((acc, team) => ({...acc, [team]: 0}), {}),
+      scores: initialTeams.reduce((acc, team) => ({ ...acc, [team]: 0 }), {}),
       isGameStarted: true
     }));
 
     createGameBoard();
-    setModals(prev => ({...prev, questionInput: false}));
+    setModals(prev => ({ ...prev, questionInput: false }));
   };
 
   const selectTile = (tileId) => {
     const selectedTile = gameBoard.tiles.find(t => t.id === tileId);
-    
+
     setGameBoard(prev => ({
       ...prev,
       tilesState: {
@@ -119,10 +120,10 @@ const QuizGame = () => {
     }));
 
     if (selectedTile.type === 'question') {
-      setModals(prev => ({...prev, currentQuestion: true}));
+      setModals(prev => ({ ...prev, currentQuestion: true }));
       setIsAnswerRevealed(false);
     } else {
-      setModals(prev => ({...prev, mysteryBag: true}));
+      setModals(prev => ({ ...prev, mysteryBag: true }));
     }
   };
 
@@ -132,7 +133,7 @@ const QuizGame = () => {
     const nextTeamIndex = (currentTeam + 1) % teams.length;
     const effect = gameBoard.selectedTile.effect;
 
-    const newScores = {...scores};
+    const newScores = { ...scores };
     if (effect === 'swap') {
       const teamNames = Object.keys(newScores);
       if (teamNames.length > 1) {
@@ -149,8 +150,8 @@ const QuizGame = () => {
       scores: newScores
     }));
 
-    setModals(prev => ({...prev, mysteryBag: false}));
-    setGameBoard(prev => ({...prev, selectedTile: null}));
+    setModals(prev => ({ ...prev, mysteryBag: false }));
+    setGameBoard(prev => ({ ...prev, selectedTile: null }));
   };
 
   const revealAnswer = () => {
@@ -162,7 +163,7 @@ const QuizGame = () => {
     const currentTeamName = teams[currentTeam];
     const nextTeamIndex = (currentTeam + 1) % teams.length;
 
-    const newScores = {...scores};
+    const newScores = { ...scores };
     if (isCorrect) {
       newScores[currentTeamName] += 1;
     }
@@ -173,8 +174,8 @@ const QuizGame = () => {
       scores: newScores
     }));
 
-    setModals(prev => ({...prev, currentQuestion: false}));
-    setGameBoard(prev => ({...prev, selectedTile: null}));
+    setModals(prev => ({ ...prev, currentQuestion: false }));
+    setGameBoard(prev => ({ ...prev, selectedTile: null }));
     setIsAnswerRevealed(false);
   };
 
@@ -183,7 +184,7 @@ const QuizGame = () => {
     setGameSetup(prev => ({
       ...prev,
       currentTeam: 0,
-      scores: prev.teams.reduce((acc, team) => ({...acc, [team]: 0}), {})
+      scores: prev.teams.reduce((acc, team) => ({ ...acc, [team]: 0 }), {})
     }));
     setModals(prev => ({
       ...prev,
@@ -194,14 +195,14 @@ const QuizGame = () => {
   };
 
   const endGame = () => {
-    setModals(prev => ({...prev, gameOver: true}));
+    setModals(prev => ({ ...prev, gameOver: true }));
   };
 
   const getWinningTeam = () => {
     const scores = gameSetup.scores;
     const teams = Object.entries(scores);
     if (teams.length === 0) return null;
-    const winner = teams.reduce((max, current) => 
+    const winner = teams.reduce((max, current) =>
       current[1] > max[1] ? current : max
     );
     return winner[0];
@@ -209,17 +210,17 @@ const QuizGame = () => {
 
   return (
     <Container fluid className="quiz-container">
-      {/* Question Input Modal */}
+      {/* Modal Nhập Câu Hỏi */}
       <Modal show={modals.questionInput} backdrop="static" keyboard={false} size="lg">
         <Modal.Header>
-          <Modal.Title>Nhập Câu Hỏi</Modal.Title>
+          <Modal.Title>🎉 Nhập Câu Hỏi</Modal.Title>
         </Modal.Header>
         <Modal.Body>
           {customQuestions.map((q, index) => (
             <div key={index} className="question-input">
               <Form.Group className="mb-3">
                 <Form.Label>Câu Hỏi {index + 1}</Form.Label>
-                <Form.Control 
+                <Form.Control
                   as="textarea"
                   rows={2}
                   placeholder={`Nhập câu hỏi ${index + 1}`}
@@ -229,7 +230,7 @@ const QuizGame = () => {
               </Form.Group>
               <Form.Group className="mb-3">
                 <Form.Label>Câu Trả Lời Đúng</Form.Label>
-                <Form.Control 
+                <Form.Control
                   type="text"
                   placeholder={`Nhập câu trả lời đúng ${index + 1}`}
                   value={q.correctAnswer}
@@ -238,7 +239,7 @@ const QuizGame = () => {
               </Form.Group>
               <Form.Group>
                 <Form.Label>Loại Đáp Án</Form.Label>
-                <Form.Select 
+                <Form.Select
                   value={q.answerType}
                   onChange={(e) => handleQuestionInput(index, 'answerType', e.target.value)}
                 >
@@ -256,15 +257,15 @@ const QuizGame = () => {
         </Modal.Footer>
       </Modal>
 
-      {/* Game Interface */}
+      {/* Giao Diện Trò Chơi */}
       {gameSetup.isGameStarted && (
         <>
           <Row className="mb-4">
-            <Col className="d-flex justify-content-between">
-              <Button 
-                variant="success" 
-                className="btn-custom" 
-                onClick={() => setModals(prev => ({...prev, questionInput: true}))}
+            <Col className="d-flex justify-content-between align-items-center flex-wrap gap-2">
+              <Button
+                variant="success"
+                className="btn-custom"
+                onClick={() => setModals(prev => ({ ...prev, questionInput: true }))}
               >
                 Nhập Câu Hỏi Mới
               </Button>
@@ -280,13 +281,13 @@ const QuizGame = () => {
           <Row className="row-cols-4 g-4">
             {gameBoard.tiles.map(tile => (
               <Col key={tile.id} className="d-flex justify-content-center">
-                <Button 
+                <Button
                   variant={gameBoard.tilesState[tile.id] ? "secondary" : "outline-dark"}
                   onClick={() => selectTile(tile.id)}
                   disabled={gameBoard.tilesState[tile.id]}
                   className="tile-btn"
                 >
-                  {tile.id}
+                  {tile.type === 'question' ? `C${tile.id}` : `B${tile.id}`}
                 </Button>
               </Col>
             ))}
@@ -295,7 +296,7 @@ const QuizGame = () => {
           <Row className="mt-4">
             {gameSetup.teams.map((team, index) => (
               <Col key={team}>
-                <Card className={`team-card ${gameSetup.currentTeam === index ? 'active' : ''}`}>
+                <Card className={`team-card ${gameSetup.currentTeam === index ? 'active animate__animated animate__pulse' : ''}`}>
                   <Card.Header>
                     {team}: {gameSetup.scores[team]} điểm
                   </Card.Header>
@@ -306,8 +307,8 @@ const QuizGame = () => {
         </>
       )}
 
-      {/* Current Question Modal */}
-      <Modal show={modals.currentQuestion} onHide={() => setModals(prev => ({...prev, currentQuestion: false}))}>
+      {/* Modal Câu Hỏi Hiện Tại */}
+      <Modal show={modals.currentQuestion} onHide={() => setModals(prev => ({ ...prev, currentQuestion: false }))}>
         <Modal.Header closeButton>
           <Modal.Title>Câu Hỏi {gameBoard.selectedTile?.id}</Modal.Title>
         </Modal.Header>
@@ -329,8 +330,8 @@ const QuizGame = () => {
               ) : (
                 <Row>
                   <Col>
-                    <Button 
-                      variant="outline-success" 
+                    <Button
+                      variant="outline-success"
                       className="btn-custom w-100"
                       onClick={() => selectAnswer(gameBoard.selectedTile.answerType === 'Okay!')}
                     >
@@ -338,8 +339,8 @@ const QuizGame = () => {
                     </Button>
                   </Col>
                   <Col>
-                    <Button 
-                      variant="outline-danger" 
+                    <Button
+                      variant="outline-danger"
                       className="btn-custom w-100"
                       onClick={() => selectAnswer(gameBoard.selectedTile.answerType === 'Oops!')}
                     >
@@ -353,16 +354,16 @@ const QuizGame = () => {
         </Modal.Body>
       </Modal>
 
-      {/* Mystery Bag Modal */}
-      <Modal show={modals.mysteryBag} onHide={() => setModals(prev => ({...prev, mysteryBag: false}))}>
+      {/* Modal Túi Bí Ẩn */}
+      <Modal show={modals.mysteryBag} onHide={() => setModals(prev => ({ ...prev, mysteryBag: false }))}>
         <Modal.Header closeButton>
           <Modal.Title>Túi Mù {gameBoard.selectedTile?.id}</Modal.Title>
         </Modal.Header>
         <Modal.Body>
           <div className="text-center">
             <p className="h5">
-              Hiệu ứng: {gameBoard.selectedTile?.effect === 'swap' 
-                ? 'Hoán đổi điểm số giữa các đội' 
+              Hiệu ứng: {gameBoard.selectedTile?.effect === 'swap'
+                ? 'Hoán đổi điểm số giữa các đội'
                 : `${gameBoard.selectedTile?.effect > 0 ? '+' : ''}${gameBoard.selectedTile?.effect} điểm`}
             </p>
           </div>
@@ -374,14 +375,14 @@ const QuizGame = () => {
         </Modal.Footer>
       </Modal>
 
-      {/* Game Over Modal */}
-      <Modal show={modals.gameOver} onHide={() => setModals(prev => ({...prev, gameOver: false}))}>
+      {/* Modal Kết Thúc Trò Chơi */}
+      <Modal show={modals.gameOver} onHide={() => setModals(prev => ({ ...prev, gameOver: false }))}>
         <Modal.Header closeButton>
           <Modal.Title>Kết Thúc Trò Chơi</Modal.Title>
         </Modal.Header>
         <Modal.Body>
           <div className="text-center mb-3">
-            <p className="winner-text">Chúc mừng {getWinningTeam()} đã chiến thắng!</p>
+            <p className="winner-text">Chúc mừng {getWinningTeam()} đã chiến thắng! 😊</p>
           </div>
           {Object.entries(gameSetup.scores).map(([team, score]) => (
             <div key={team} className="d-flex justify-content-between mb-2">
@@ -391,7 +392,7 @@ const QuizGame = () => {
           ))}
         </Modal.Body>
         <Modal.Footer>
-          <Button variant="secondary" className="btn-custom" onClick={() => setModals(prev => ({...prev, gameOver: false}))}>
+          <Button variant="secondary" className="btn-custom" onClick={() => setModals(prev => ({ ...prev, gameOver: false }))}>
             Đóng
           </Button>
           <Button variant="primary" className="btn-custom" onClick={resetGame}>
