@@ -8,43 +8,42 @@ const QuizGame = () => {
     document.title = 'Quiz Võ Phạm Diễm Quỳnh';
   }, []);
 
-  // Gán cứng 6 câu hỏi và đáp án, có thể chỉnh sửa qua Modal
   const [customQuestions, setCustomQuestions] = useState([
     {
       question: 'What is it?',
       correctAnswer: 'The park',
       answerType: 'Okay!',
-      image: '../public/vpdq3.png', // Thay bằng URL hình ảnh nếu có, ví dụ: '/images/park.jpg'
+      image: '/vpdq3.png',
     },
     {
       question: 'What is it?',
       correctAnswer: 'It’s a movie theater.',
       answerType: 'Okay!',
-      image:  '../public/vpdq1.png', // Thay bằng URL hình ảnh nếu có, ví dụ: '/images/movie_theater.jpg'
+      image: '/vpdq1.png',
     },
     {
       question: "It's ... on the street",
       correctAnswer: 'On the right',
       answerType: 'Okay!',
-      image:  '../public/vpdq2.png', // Thay bằng URL hình ảnh nếu có
+      image: '/vpdq2.png',
     },
     {
       question: 'What is it?',
       correctAnswer: 'It’s a department store',
       answerType: 'Okay!',
-      image:  '../public/vpdq4.png', // Thay bằng URL hình ảnh nếu có
+      image: '/vpdq4.png',
     },
     {
       question: 'Where is next to the supermarket?',
       correctAnswer: 'The library',
       answerType: 'Okay!',
-      image:  '../public/vpdq5.png', // Thay bằng URL hình ảnh nếu có
+      image: '/vpdq5.png',
     },
     {
       question: 'The park is .... the supermarket',
       correctAnswer: 'Across from',
       answerType: 'Okay!',
-      image:  '../public/vpdq6.png', // Thay bằng URL hình ảnh nếu có
+      image: '/vpdq6.png',
     },
   ]);
 
@@ -99,7 +98,7 @@ const QuizGame = () => {
     ];
 
     const allTiles = shuffleArray([...questionTiles, ...mysteryBags]);
-    const finalTiles = allTiles.slice(0, 8); // Chỉ giữ 8 ô
+    const finalTiles = allTiles.slice(0, 8);
 
     const tilesState = finalTiles.reduce((acc, tile) => ({
       ...acc,
@@ -247,8 +246,14 @@ const QuizGame = () => {
   return (
     <Container fluid className="quiz-container">
       {/* Modal Nhập Câu Hỏi */}
-      <Modal show={modals.questionInput} backdrop="static" keyboard={false} size="lg">
-        <Modal.Header>
+      <Modal
+        show={modals.questionInput}
+        onHide={() => setModals(prev => ({ ...prev, questionInput: false }))}
+        backdrop="static"
+        keyboard={false}
+        size="lg"
+      >
+        <Modal.Header closeButton>
           <Modal.Title>🎉 Nhập Câu Hỏi</Modal.Title>
         </Modal.Header>
         <Modal.Body>
