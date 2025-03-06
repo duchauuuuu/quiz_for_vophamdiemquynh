@@ -6,13 +6,14 @@ import { Button, Card, Modal, Form, Container, Row, Col } from 'react-bootstrap'
 const QuizGame = () => {
   useEffect(() => {
     document.title = 'Quiz Võ Phạm Diễm Quỳnh';
-  }, []); // Mảng rỗng để chỉ chạy một lần khi component mount
+  }, []);
 
   const [customQuestions, setCustomQuestions] = useState(
-    Array.from({ length: 8 }, () => ({
+    Array.from({ length: 6 }, () => ({
       question: '',
       correctAnswer: '',
-      answerType: 'Okay!'
+      answerType: 'Okay!',
+      image: null
     }))
   );
 
@@ -44,6 +45,16 @@ const QuizGame = () => {
     setCustomQuestions(newQuestions);
   };
 
+  const handleImageUpload = (index, event) => {
+    const file = event.target.files[0];
+    if (file) {
+      const imageUrl = URL.createObjectURL(file);
+      const newQuestions = [...customQuestions];
+      newQuestions[index].image = imageUrl;
+      setCustomQuestions(newQuestions);
+    }
+  };
+
   const createGameBoard = () => {
     const questionTiles = customQuestions.map((q, index) => ({
       id: index + 1,
@@ -51,14 +62,13 @@ const QuizGame = () => {
       ...q
     }));
 
-    const mysteryBags = Array.from({ length: 8 }, (_, i) => ({
-      id: i + 9,
-      type: 'powerup',
-      effect: [2, -1, 1, 0, 3, -2, 2, 'swap'][i]
-    }));
+    const mysteryBags = [
+      { id: 7, type: 'powerup', effect: 35 },
+      { id: 8, type: 'powerup', effect: 50 }
+    ];
 
     const allTiles = shuffleArray([...questionTiles, ...mysteryBags]);
-    const finalTiles = allTiles.slice(0, 16);
+    const finalTiles = allTiles.slice(0, 8); // Chỉ giữ 8 ô
 
     const tilesState = finalTiles.reduce((acc, tile) => ({
       ...acc,
@@ -134,15 +144,7 @@ const QuizGame = () => {
     const effect = gameBoard.selectedTile.effect;
 
     const newScores = { ...scores };
-    if (effect === 'swap') {
-      const teamNames = Object.keys(newScores);
-      if (teamNames.length > 1) {
-        const [team1, team2] = teamNames;
-        [newScores[team1], newScores[team2]] = [newScores[team2], newScores[team1]];
-      }
-    } else {
-      newScores[currentTeamName] += effect;
-    }
+    newScores[currentTeamName] += effect; // Cộng 35 hoặc 50
 
     setGameSetup(prev => ({
       ...prev,
@@ -165,7 +167,9 @@ const QuizGame = () => {
 
     const newScores = { ...scores };
     if (isCorrect) {
-      newScores[currentTeamName] += 1;
+      // Cộng ngẫu nhiên từ 10 đến 25 điểm
+      const randomPoints = Math.floor(Math.random() * (25 - 10 + 1)) + 10;
+      newScores[currentTeamName] += randomPoints;
     }
 
     setGameSetup(prev => ({
@@ -217,7 +221,7 @@ const QuizGame = () => {
         </Modal.Header>
         <Modal.Body>
           {customQuestions.map((q, index) => (
-            <div key={index} className="question-input">
+            <div key={index} className="question-input mb-4">
               <Form.Group className="mb-3">
                 <Form.Label>Câu Hỏi {index + 1}</Form.Label>
                 <Form.Control
@@ -236,6 +240,19 @@ const QuizGame = () => {
                   value={q.correctAnswer}
                   onChange={(e) => handleQuestionInput(index, 'correctAnswer', e.target.value)}
                 />
+              </Form.Group>
+              <Form.Group className="mb-3">
+                <Form.Label>Ảnh (Tùy chọn)</Form.Label>
+                <Form.Control
+                  type="file"
+                  accept="image/*"
+                  onChange={(e) => handleImageUpload(index, e)}
+                />
+                {q.image && (
+                  <div className="mt-2">
+                    <img src={q.image} alt={`Preview ${index + 1}`} style={{ maxWidth: '200px', maxHeight: '200px' }} />
+                  </div>
+                )}
               </Form.Group>
               <Form.Group>
                 <Form.Label>Loại Đáp Án</Form.Label>
@@ -287,7 +304,7 @@ const QuizGame = () => {
                   disabled={gameBoard.tilesState[tile.id]}
                   className="tile-btn"
                 >
-                  {tile.type === 'question' ? `C${tile.id}` : `B${tile.id}`}
+                  {tile.id}
                 </Button>
               </Col>
             ))}
@@ -316,6 +333,9 @@ const QuizGame = () => {
           {gameBoard.selectedTile && (
             <>
               <div className="text-center mb-4">
+                {gameBoard.selectedTile.image && (
+                  <img src={gameBoard.selectedTile.image} alt="Question" className="mb-3" style={{ maxWidth: '300px', maxHeight: '300px' }} />
+                )}
                 <p className="h5">{gameBoard.selectedTile.question}</p>
                 {isAnswerRevealed && (
                   <p className="text-success mt-2">Đáp án đúng: {gameBoard.selectedTile.correctAnswer}</p>
@@ -361,11 +381,7 @@ const QuizGame = () => {
         </Modal.Header>
         <Modal.Body>
           <div className="text-center">
-            <p className="h5">
-              Hiệu ứng: {gameBoard.selectedTile?.effect === 'swap'
-                ? 'Hoán đổi điểm số giữa các đội'
-                : `${gameBoard.selectedTile?.effect > 0 ? '+' : ''}${gameBoard.selectedTile?.effect} điểm`}
-            </p>
+            <p className="h5">Hiệu ứng: +{gameBoard.selectedTile?.effect} điểm</p>
           </div>
         </Modal.Body>
         <Modal.Footer>
