@@ -8,14 +8,45 @@ const QuizGame = () => {
     document.title = 'Quiz Võ Phạm Diễm Quỳnh';
   }, []);
 
-  const [customQuestions, setCustomQuestions] = useState(
-    Array.from({ length: 6 }, () => ({
-      question: '',
-      correctAnswer: '',
+  // Gán cứng 6 câu hỏi và đáp án, có thể chỉnh sửa qua Modal
+  const [customQuestions, setCustomQuestions] = useState([
+    {
+      question: 'What is it?',
+      correctAnswer: 'The park',
       answerType: 'Okay!',
-      image: null
-    }))
-  );
+      image: '../public/vpdq3.png', // Thay bằng URL hình ảnh nếu có, ví dụ: '/images/park.jpg'
+    },
+    {
+      question: 'What is it?',
+      correctAnswer: 'It’s a movie theater.',
+      answerType: 'Okay!',
+      image:  '../public/vpdq1.png', // Thay bằng URL hình ảnh nếu có, ví dụ: '/images/movie_theater.jpg'
+    },
+    {
+      question: "It's ... on the street",
+      correctAnswer: 'On the right',
+      answerType: 'Okay!',
+      image:  '../public/vpdq2.png', // Thay bằng URL hình ảnh nếu có
+    },
+    {
+      question: 'What is it?',
+      correctAnswer: 'It’s a department store',
+      answerType: 'Okay!',
+      image:  '../public/vpdq4.png', // Thay bằng URL hình ảnh nếu có
+    },
+    {
+      question: 'Where is next to the supermarket?',
+      correctAnswer: 'The library',
+      answerType: 'Okay!',
+      image:  '../public/vpdq5.png', // Thay bằng URL hình ảnh nếu có
+    },
+    {
+      question: 'The park is .... the supermarket',
+      correctAnswer: 'Across from',
+      answerType: 'Okay!',
+      image:  '../public/vpdq6.png', // Thay bằng URL hình ảnh nếu có
+    },
+  ]);
 
   const [gameSetup, setGameSetup] = useState({
     teams: [],
@@ -144,7 +175,7 @@ const QuizGame = () => {
     const effect = gameBoard.selectedTile.effect;
 
     const newScores = { ...scores };
-    newScores[currentTeamName] += effect; // Cộng 35 hoặc 50
+    newScores[currentTeamName] += effect;
 
     setGameSetup(prev => ({
       ...prev,
@@ -160,14 +191,15 @@ const QuizGame = () => {
     setIsAnswerRevealed(true);
   };
 
-  const selectAnswer = (isCorrect) => {
+  const selectAnswer = (playerChoice) => {
     const { currentTeam, teams, scores } = gameSetup;
     const currentTeamName = teams[currentTeam];
     const nextTeamIndex = (currentTeam + 1) % teams.length;
 
     const newScores = { ...scores };
-    if (isCorrect) {
-      // Cộng ngẫu nhiên từ 10 đến 25 điểm
+    const correctAnswerType = gameBoard.selectedTile.answerType;
+
+    if (playerChoice === correctAnswerType && playerChoice === 'Okay!') {
       const randomPoints = Math.floor(Math.random() * (25 - 10 + 1)) + 10;
       newScores[currentTeamName] += randomPoints;
     }
@@ -353,7 +385,7 @@ const QuizGame = () => {
                     <Button
                       variant="outline-success"
                       className="btn-custom w-100"
-                      onClick={() => selectAnswer(gameBoard.selectedTile.answerType === 'Okay!')}
+                      onClick={() => selectAnswer('Okay!')}
                     >
                       Okay!
                     </Button>
@@ -362,7 +394,7 @@ const QuizGame = () => {
                     <Button
                       variant="outline-danger"
                       className="btn-custom w-100"
-                      onClick={() => selectAnswer(gameBoard.selectedTile.answerType === 'Oops!')}
+                      onClick={() => selectAnswer('Oops!')}
                     >
                       Oops!
                     </Button>
