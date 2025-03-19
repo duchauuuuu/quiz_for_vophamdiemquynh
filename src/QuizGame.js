@@ -17,19 +17,19 @@ const QuizGame = () => {
     },
     {
       question: 'What is it?',
-      correctAnswer: 'It’s a movie theater.',
+      correctAnswer: `It's a movie theater.`,
       answerType: 'Okay!',
       image: '/vpdq1.png',
     },
     {
-      question: "It's ... on the street",
-      correctAnswer: 'On the right',
+      question: "The supermarket is_____the hotel and the swimming pool.",
+      correctAnswer: 'Between',
       answerType: 'Okay!',
-      image: '/vpdq2.png',
+      image: '/qnew.png',
     },
     {
       question: 'What is it?',
-      correctAnswer: 'It’s a department store',
+      correctAnswer: `It's a department store`,
       answerType: 'Okay!',
       image: '/vpdq4.png',
     },
@@ -127,13 +127,13 @@ const QuizGame = () => {
     );
 
     if (!allQuestionsValid) {
-      alert('Vui lòng điền đầy đủ câu hỏi và câu trả lời!');
+      alert('Please fill in all questions and answers!');
       return;
     }
 
     const initialTeams = gameSetup.teams.length > 0
       ? gameSetup.teams
-      : ['Đội 1', 'Đội 2'];
+      : ['Team 1', 'Team 2'];
 
     setGameSetup(prev => ({
       ...prev,
@@ -245,7 +245,7 @@ const QuizGame = () => {
 
   return (
     <Container fluid className="quiz-container">
-      {/* Modal Nhập Câu Hỏi */}
+      {/* Question Input Modal */}
       <Modal
         show={modals.questionInput}
         onHide={() => setModals(prev => ({ ...prev, questionInput: false }))}
@@ -254,32 +254,32 @@ const QuizGame = () => {
         size="lg"
       >
         <Modal.Header closeButton>
-          <Modal.Title>🎉 Nhập Câu Hỏi</Modal.Title>
+          <Modal.Title>🎉 Enter Questions</Modal.Title>
         </Modal.Header>
         <Modal.Body>
           {customQuestions.map((q, index) => (
             <div key={index} className="question-input mb-4">
               <Form.Group className="mb-3">
-                <Form.Label>Câu Hỏi {index + 1}</Form.Label>
+                <Form.Label>Question {index + 1}</Form.Label>
                 <Form.Control
                   as="textarea"
                   rows={2}
-                  placeholder={`Nhập câu hỏi ${index + 1}`}
+                  placeholder={`Enter question ${index + 1}`}
                   value={q.question}
                   onChange={(e) => handleQuestionInput(index, 'question', e.target.value)}
                 />
               </Form.Group>
               <Form.Group className="mb-3">
-                <Form.Label>Câu Trả Lời Đúng</Form.Label>
+                <Form.Label>Correct Answer</Form.Label>
                 <Form.Control
                   type="text"
-                  placeholder={`Nhập câu trả lời đúng ${index + 1}`}
+                  placeholder={`Enter correct answer ${index + 1}`}
                   value={q.correctAnswer}
                   onChange={(e) => handleQuestionInput(index, 'correctAnswer', e.target.value)}
                 />
               </Form.Group>
               <Form.Group className="mb-3">
-                <Form.Label>Ảnh (Tùy chọn)</Form.Label>
+                <Form.Label>Image (Optional)</Form.Label>
                 <Form.Control
                   type="file"
                   accept="image/*"
@@ -292,7 +292,7 @@ const QuizGame = () => {
                 )}
               </Form.Group>
               <Form.Group>
-                <Form.Label>Loại Đáp Án</Form.Label>
+                <Form.Label>Answer Type</Form.Label>
                 <Form.Select
                   value={q.answerType}
                   onChange={(e) => handleQuestionInput(index, 'answerType', e.target.value)}
@@ -306,12 +306,12 @@ const QuizGame = () => {
         </Modal.Body>
         <Modal.Footer>
           <Button variant="primary" className="btn-custom" onClick={startGame}>
-            Tạo Trò Chơi
+            Create Game
           </Button>
         </Modal.Footer>
       </Modal>
 
-      {/* Giao Diện Trò Chơi */}
+      {/* Game Interface */}
       {gameSetup.isGameStarted && (
         <>
           <Row className="mb-4">
@@ -321,13 +321,13 @@ const QuizGame = () => {
                 className="btn-custom"
                 onClick={() => setModals(prev => ({ ...prev, questionInput: true }))}
               >
-                Nhập Câu Hỏi Mới
+                Enter New Questions
               </Button>
               <Button variant="danger" className="btn-custom" onClick={endGame}>
-                Kết Thúc Trò Chơi
+                End Game
               </Button>
               <Button variant="secondary" className="btn-custom" onClick={resetGame}>
-                Làm Mới
+                Refresh
               </Button>
             </Col>
           </Row>
@@ -352,7 +352,7 @@ const QuizGame = () => {
               <Col key={team}>
                 <Card className={`team-card ${gameSetup.currentTeam === index ? 'active animate__animated animate__pulse' : ''}`}>
                   <Card.Header>
-                    {team}: {gameSetup.scores[team]} điểm
+                    {team}: {gameSetup.scores[team]} points
                   </Card.Header>
                 </Card>
               </Col>
@@ -361,10 +361,10 @@ const QuizGame = () => {
         </>
       )}
 
-      {/* Modal Câu Hỏi Hiện Tại */}
+      {/* Current Question Modal */}
       <Modal show={modals.currentQuestion} onHide={() => setModals(prev => ({ ...prev, currentQuestion: false }))}>
         <Modal.Header closeButton>
-          <Modal.Title>Câu Hỏi {gameBoard.selectedTile?.id}</Modal.Title>
+          <Modal.Title>Question {gameBoard.selectedTile?.id}</Modal.Title>
         </Modal.Header>
         <Modal.Body>
           {gameBoard.selectedTile && (
@@ -375,7 +375,7 @@ const QuizGame = () => {
                 )}
                 <p className="h5">{gameBoard.selectedTile.question}</p>
                 {isAnswerRevealed && (
-                  <p className="text-success mt-2">Đáp án đúng: {gameBoard.selectedTile.correctAnswer}</p>
+                  <p className="text-success mt-2">Correct answer: {gameBoard.selectedTile.correctAnswer}</p>
                 )}
               </div>
               {!isAnswerRevealed ? (
@@ -411,45 +411,45 @@ const QuizGame = () => {
         </Modal.Body>
       </Modal>
 
-      {/* Modal Túi Bí Ẩn */}
+      {/* Mystery Bag Modal */}
       <Modal show={modals.mysteryBag} onHide={() => setModals(prev => ({ ...prev, mysteryBag: false }))}>
         <Modal.Header closeButton>
-          <Modal.Title>Túi Mù {gameBoard.selectedTile?.id}</Modal.Title>
+          <Modal.Title>Mystery Bag {gameBoard.selectedTile?.id}</Modal.Title>
         </Modal.Header>
         <Modal.Body>
           <div className="text-center">
-            <p className="h5">Hiệu ứng: +{gameBoard.selectedTile?.effect} điểm</p>
+            <p className="h5">Effect: +{gameBoard.selectedTile?.effect} points</p>
           </div>
         </Modal.Body>
         <Modal.Footer>
           <Button variant="primary" className="btn-custom" onClick={handleMysteryBag}>
-            Xác Nhận
+            Confirm
           </Button>
         </Modal.Footer>
       </Modal>
 
-      {/* Modal Kết Thúc Trò Chơi */}
+      {/* Game Over Modal */}
       <Modal show={modals.gameOver} onHide={() => setModals(prev => ({ ...prev, gameOver: false }))}>
         <Modal.Header closeButton>
-          <Modal.Title>Kết Thúc Trò Chơi</Modal.Title>
+          <Modal.Title>Game Over</Modal.Title>
         </Modal.Header>
         <Modal.Body>
           <div className="text-center mb-3">
-            <p className="winner-text">Chúc mừng {getWinningTeam()} đã chiến thắng! 😊</p>
+            <p className="winner-text">Congratulations {getWinningTeam()} has won! 😊</p>
           </div>
           {Object.entries(gameSetup.scores).map(([team, score]) => (
             <div key={team} className="d-flex justify-content-between mb-2">
               <span>{team}</span>
-              <span>{score} điểm</span>
+              <span>{score} points</span>
             </div>
           ))}
         </Modal.Body>
         <Modal.Footer>
           <Button variant="secondary" className="btn-custom" onClick={() => setModals(prev => ({ ...prev, gameOver: false }))}>
-            Đóng
+            Close
           </Button>
           <Button variant="primary" className="btn-custom" onClick={resetGame}>
-            Chơi Lại
+            Play Again
           </Button>
         </Modal.Footer>
       </Modal>
