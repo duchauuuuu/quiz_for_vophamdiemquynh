@@ -93,8 +93,8 @@ const QuizGame = () => {
     }));
 
     const mysteryBags = [
-      { id: 7, type: 'powerup', effect: 35 },
-      { id: 8, type: 'powerup', effect: 50 }
+      { id: 7, type: 'powerup', effect: 10 },
+      { id: 8, type: 'powerup', effect: 5 }
     ];
 
     const allTiles = shuffleArray([...questionTiles, ...mysteryBags]);
@@ -199,7 +199,7 @@ const QuizGame = () => {
     const correctAnswerType = gameBoard.selectedTile.answerType;
 
     if (playerChoice === correctAnswerType && playerChoice === 'Okay!') {
-      const randomPoints = Math.floor(Math.random() * (25 - 10 + 1)) + 10;
+      const randomPoints = Math.floor(Math.random() * (10 - 2 + 1)) + 2;
       newScores[currentTeamName] += randomPoints;
     }
 
